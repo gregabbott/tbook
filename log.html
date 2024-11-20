@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<link rel=icon href=data:;base64,iVBORw0KGgo=>
+<title>Perline &mdash; Changelog</title>
+<style>
+  :root{
+	color-scheme: light dark;
+  --light:hsl(60, 25%, 95%);
+  --dark:hsl(15, 5%, 10%);
+	--bg:light-dark(var(--light),var(--dark));
+	--fg:light-dark(var(--dark),var(--light));
+}
+* {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: monospace;
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+header {
+  padding: 2ch;
+  border-bottom: 1px solid var(--fg);
+}
+pre {
+  padding: 2ch;
+  white-space: pre-wrap;
+  padding-bottom: 100px;
+  flex:1;
+  overflow-y:auto;
+  display: flex;
+}
+footer{
+  padding: 2ch;
+  border-top: 1px solid var(--fg);
+}
+</style>
+</head>
+<body>
+  <header>
+    <a href="index.html">EPUB to TBOOK TOOL</a> CHANGELOG
+  </header>
+<pre>
+<!-- date blocks new to old, items old to new -->
+Current Version = Newest date below
+
+BEGAN: 2024_1111
+
+# 2024
+## 1120 (74KB)
+Refactors async await style to callback.
+Extends to ASCII function to cover more look-alikes.
+Removes more invisibles from ASCII (keeps tabs space returns).
+Processes text extracted for text file names.
+Refactors uint8_is_valid_utf8 function.
+Refactors drag drop logic.
+
+## 1119
+Adds license
+
+## 1118 (66KB)
+Reads ePub metadata and saves to .json (with MD / ASCII values).
+Uses metadata for naming folders in zip 'Author - Title'.
+Updates about text and UI.
+Adds save button to allow manual re-downloading.
+
+## 1117 (64KB)
+Splits text processing logic to script 'process_text'.
+Lets process_text replace non-ASCII with look-alikes: © -> (c).
+Searches for more file types to capture all .epub sections.
+Minifies external markdown lib (1/3 of prior weight, now 11KB).
+Adds 'to ASCII' option to front end.
+Refactors some code to use chains for clarity.
+Refactors towards more but simpler functions.
+
+## 1116 (79KB)
+Cleans files slightly (e.g. swaps weird spaces for normal).
+Uses fflate instead of JSzip, Halves project weight.
+
+## 1112 (139KB)
+Reworks to need only jszip (removes external epub lib).
+Chucks empty section files.
+Prefixes numbers to text files to match order in .epub.
+
+## 1111 (377KB)
+Reads an epub file (uses external lib).
+Gets HTML textContent of each chapter in an epub.
+Converts user provided .epub to a .txt file.
+Adds drag and drop option to receive files.
+Reads and converts multiple dropped files.
+Saves one zip containing one txt file per .epub.
+  (Uses jszip, as the epub lib already uses it).
+Makes a folder per .epub with file per section.
+Names files using the first header found within a file.
+Prefixes chapter files with number for sorting.
+Auto creates and saves .zip of processed .epubs.
+Converts to Markdown (via external lib).
+Tweaks Markdown settings.
+Cleans text slightly (e.g. 1 blank line maximum).
+</pre>
+<footer>
+Copyright <a href="https://gregabbott.pages.dev/">Greg Abbott</a> 2024
+</footer>
+</body>
+</html>
