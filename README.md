@@ -1,6 +1,5 @@
-[The Tbook Website](https://tbook.pages.dev/)
-
-Tool to convert EPUBs to TBooks
+# Tbook
+Visit [The Tbook Website](https://tbook.pages.dev/) to convert EPUBs to TBooks.
 
 A Tbook consists of a zipped or unzipped folder
   that holds sequential MD or TXT text files.
