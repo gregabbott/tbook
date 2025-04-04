@@ -6,70 +6,15 @@
 <link rel=icon href=data:;base64,iVBORw0KGgo=>
 <link href=c.css rel=stylesheet>
 <title>Tbook &mdash; Folder per book, text file per section</title>
-</head>
-<body>
-  <header><h1>Convert EPUBS to Tbooks</h1></header><p>A Tbook consists of a zipped or unzipped folder that holds sequential MD or TXT text files. The folder represents a book and each file represents a section in the book. The file names control the section order. The folder may also contain an optional metadata file.</p>
-<main>
-<details><summary>About This Tool</summary>
+<meta
+name="description"
+content="This tool converts epubs to tbooks and saves one zip file per run.">
+</head><body>  <header><h1>Batch Convert EPUBS to Tbooks</h1></header>
 <div>
-<p>This tool converts Epubs to Tbooks. It:</p>
-<details>
-  <summary>Makes one ZIP file per run</summary>
-  <div>
-<p>Names the ZIP file 'QTY Converted EPUBs'.<br>
-Populates each ZIP with the processed EPUB files.</p>
-</div></details>
-<details>
-<summary>Makes one folder per EPUB</summary><div>
-<p>Uses the EPUB's name or metadata to name the folder.<br>
-Populates the folder with the converted EPUB file content.</p></div>
-</details>
-<details><summary>Makes one JSON metadata file per EPUB</summary>
-  <div><p>- Preserves various metadata found in the EPUB.<br>
-  - Optionally processes metadata values to ASCII.</p>
-  </div>
-  </details>
-<details>
-<summary>Makes one MD plain text file per EPUB section</summary>
-<div>
-<p>Skips empty sections.</br>
-Names the file after the first heading it contains.<br>
-Prefixes file names with a number to preserve sort order.<br>
-Converts text to Markdown format plain text.<br>
-Runs minor cleanup: e.g.<br>
-- Swaps consecutive blank lines for a single blank line.<br>
-- Removes invisible characters except for 'space'.<br>
-(Optionally) Converts to ASCII:<br>
-- Converts non-ASCII characters to the most similar: é > e.<br>
-- Removes remaining non-ASCII characters.<br>
-- Reduces characters used to: A-Z, a-z, 0-9, and symbols.</p>
-</div>
-</details>
-<details><summary>Notes</summary>
-  <div>
-<p>Once loaded, this tool runs entirely in a browser.</br>
-The tool accepts unencrypted EPUB files.<br>
-Currently, the tool only processes EPUB text content.</p>
-</div>
-</details>
-</div>
-</details>
-<details>
-  <summary>Guide</summary>
-<div>
-<p>(1) Choose settings below.<br>
-  (2) Drag and drop one or more EPUB files to convert.<br>
-(-) The tool will auto-save a ZIP file.<br>
-(3) Unzip it to view the converted files.</p>
-</div>
-</details>
-<details open>
-
-<summary>Tool</summary>
-<div>
-  <label title="This option only suits English texts" for="make_content_ascii">Make content ASCII
+    <label title="This option only suits English texts" for="make_content_ascii">Make content ASCII
     <input type="checkbox" checked id="make_content_ascii">
   </label>
+</div>
   <input
   type=file
   id="file_picker"
@@ -83,7 +28,8 @@ Currently, the tool only processes EPUB text content.</p>
   placeholder="Any messages from the tool will appear here."
   ></textarea>
   <button id="save_button" disabled hidden>Save ZIP</button>
-</div></details>
+  <x-gap></x-gap>
+  <p>A Tbook consists of a zipped or unzipped folder that holds sequential MD or TXT text files. The folder represents a book and each file represents a section in the book. The file names control the section order. The folder may also contain an optional metadata file.
 </main>
 <footer>
 <button popovertarget="popover_license">License | By + ©</button> <a href="https://gregabbott.pages.dev/">Greg Abbott</a> 2024 | <a href="log.html">Log</a> | <a href="https://github.com/gregabbott/tbook">GitHub</a>
@@ -91,7 +37,7 @@ Currently, the tool only processes EPUB text content.</p>
 <div popover id="popover_license">
 <p>V1: 2024-11-11 (YMD)<br>
 V : 2024-11-19<br>
-By and Copyright (c) 2024 <a href="https://gregabbott.pages.dev/">Greg Abbott</a><br>
+By and Copyright (c) 2024 + 2025 <a href="https://gregabbott.pages.dev/">Greg Abbott</a><br>
   All rights reserved.<br>
 </p>
 <hr>

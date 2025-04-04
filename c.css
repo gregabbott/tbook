@@ -13,6 +13,11 @@
   --border: 1px solid var(--fg);
   --radius: 3px
 }
+hr {border: none;height: 1px; background-color: var(--fg);}
+x-gap {
+  height: 20px;
+  display: block;
+}
 * {
   padding: 0;
   margin: 0;
