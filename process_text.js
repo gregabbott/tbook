@@ -1,5 +1,26 @@
 function process_text({ascii_wanted=false}){return string=>{
   //BY + (C) Greg Abbott V 2024-11-20
+  //STEPS:
+  return chain(string,
+    make_spaces_normal,//non breaking & other spaces to regular
+    remove_invisible_ascii_characters,//record separator etc
+    only_if(ascii_wanted,convert_to_ascii),
+    remove_invisibles_on_blank_lines,//\n  \t\t  \n->\n\n
+    replace_consecutive_blank_lines_with_one,
+    start_sentences_with_one_space,//instead of many
+    remove_whitespace_before_linebreaks
+  )
+  function convert_to_ascii(s){return chain(
+    s,
+    to_most_similar_ascii_character,//emDash -> dash
+    unring_characters,//Ⓖ->(G)
+    emoji_to_description,//😀=>(Emoji of Grinning Face)
+    // only safe for English text:
+    to_latin,//é->e å->a
+    remove_non_ascii_characters, //世界 (world)->''
+  )}
+  function chain(c,...n){return n.reduce(((c,n)=>n(c)),c)}
+  function only_if(condition,fn){return X=>condition?fn(X):X}
   function emoji_to_description(string) {
     const map={
     "🙂":"Slightly Smiling Face",
@@ -186,24 +207,7 @@ function process_text({ascii_wanted=false}){return string=>{
   function replace_consecutive_blank_lines_with_one(s){
     return s.replace(/\n{3,}/g,'\n\n')
   }
-  function convert_to_ascii(s){return chain(
-      s,
-      to_most_similar_ascii_character,//emDash -> dash
-      unring_characters,//Ⓖ->(G)
-      emoji_to_description,//😀=>(Emoji of Grinning Face)
-      // only safe for English text:
-      to_latin,//é->e å->a
-      remove_non_ascii_characters, //世界 (world)->''
-  )}
-  function only_if(condition,fn){return X=>condition?fn(X):X}
-  function chain(c,...n){return n.reduce(((c,n)=>n(c)),c)}
-  //STEPS:
-  return chain(string,
-    make_spaces_normal,//non breaking & other spaces to regular
-    remove_invisible_ascii_characters,
-    remove_invisibles_on_blank_lines,
-    replace_consecutive_blank_lines_with_one,
-    start_sentences_with_one_space,//instead of many
-    only_if(ascii_wanted,convert_to_ascii)
-  )
+  function remove_whitespace_before_linebreaks(s){
+    return s.replace(/[ \t]+\n/g,'\n')//no spaces before line break
+  }
 }}

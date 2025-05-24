@@ -1,12 +1,7 @@
-// By + (C) Greg Abbott 2024 V 2024-11-19
+// By + (C) Greg Abbott 2024-2025 V 2025-05-24
 const glob ={}
-const el = {}
-const ids = [
-  `textarea_txt_holder`,
-  `file_picker`,
-  `make_content_ascii`,
-  `save_button`
-]
+const el = [...document.querySelectorAll(`[id]:not([id=""])`)]
+.reduce((a, e) => (a[e.id.trim()] = e,a), {})
 const turndown_service = new TurndownService({
   headingStyle:`atx`,//# hash prefixed headers, not underlined
   emDelimiter:`*`,
@@ -17,7 +12,6 @@ function log(x){console.log(x);return x}
 function chain(c,...n){return n.reduce(((c,n)=>n(c)),c)}
 function gebi(x){return document.getElementById(x)}
 function plural (word,n){return n+' '+word+(n==1?'':'s')}
-ids.forEach(id=>{el[id]=gebi(id)})
 el.file_picker.addEventListener('change',e=>read_zips(e.target))
 add_drag_drop(el.file_picker)
 function add_drag_drop(picker){ 
@@ -98,7 +92,7 @@ function unzip(to_unzip) {
   }
   const zip = fflate.unzipSync(to_unzip.data)//{fPath:uint8Array,}
   to_unzip.files = []
-  //string_file_extensions=["md","txt","mmd","html","js","css","xhtml"]
+  //text_extensions=["md","txt","mmd","html","js","css","xhtml"]
   for (const path in zip) {
     if (!zip.hasOwnProperty(path)) {continue}
     let file = {
@@ -110,9 +104,9 @@ function unzip(to_unzip) {
       //NOTE: 
       //can leave as uint8Array and only convert when needed
       //can also only convert if extension matches one in list
-      //e.g. string_file_extensions.includes(ext)
+      //e.g. text_extensions.includes(ext)
         //to save checking if uint8_is_valid_utf8
-      uint8_is_valid_utf8(zip[path])//StringLike
+      uint8_is_valid_utf8(zip[path])//string_like
         ? uint8_array_to_string(zip[path]) //To String
         : zip[path],//not to string
     }
@@ -123,7 +117,6 @@ function unzip(to_unzip) {
   return to_unzip
 }
 function process_unzipped_files(files){
-  //console.log(glob.unzipped)
   /*files ==  [array of arrays, one sub array per .epub:
       [
       name:epub1Name,
@@ -184,7 +177,6 @@ function get_meta(opf) {
       text_content,
       process_text({ascii_wanted:el.make_content_ascii.checked})
     ).trim()
-
     return a
     },{})//{creator,title}
 }
@@ -197,7 +189,6 @@ function process_book(book){
   //use it to get:
   book.meta=get_meta(parsed_opf)
   book.chapter_order=parse_epub_order(parsed_opf)
-  
   // process files within book
   let unordered_chapters = //{fName2:{theFile},fName1:{theFile}}
     book.files
@@ -212,7 +203,7 @@ function process_book(book){
   .reduce((a,filename) =>{
     let chapter = unordered_chapters[filename]
     if(
-      //unfound or no content
+      //not found or no content
       !chapter||chapter.is_empty
     ){return a}//don't store
     a.push(chapter)
@@ -222,7 +213,24 @@ function process_book(book){
       (chapter.title.trim().length>0?` `+chapter.title:'')
     return a
   },[])
-  //make a file to preserve the collected metadata
+  //Single file of the entire book's content
+  let make_single_file = true
+  if(make_single_file){
+    //Some epub file structures don't match content structure
+    //e.g. The HTML files contain < or > than 1 whole book unit
+    //This segment produces a TXT file of the whole book
+    //for easier processing separately
+    let text = book.chapters.reduce((a,x)=>{
+      a.push(x.processed_data)
+      return a
+    },[]).join('\n\n')
+    book.chapters.push({
+      file_name_title:'_single_file_book',
+      processed_data:text,
+      processed_ext:`md`
+    })
+  }
+  //Make a file to preserve the collected metadata
   book.chapters.push({
     file_name_title:'00 Meta',
     processed_data:JSON.stringify(book.meta,null,'\t'),
@@ -231,7 +239,7 @@ function process_book(book){
   book.best_name=get_best_book_name(book)
 }
 function get_best_book_name(book){
-  //if meta use that, else fallback to name of epub file
+  //Use meta collected or fallback to the epub file name
   /*let book = {
     meta:{
       author:'1',
@@ -301,7 +309,7 @@ function make_zip(folders){
         folder.best_name+'/'+
         file.file_name_title+
         '.'+file.processed_ext
-      //writing string so encode
+      //writing string, so encode
       zip[path] = new TextEncoder().encode(file.processed_data)
     })
   })
