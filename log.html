@@ -50,9 +50,15 @@ footer{
 <pre>BEGAN: 2024_1111
 
 # 2025
-## 1011
-Slims full fflate library to only feature used: unzip file.
-Uses custom '.tar' library (separate project) to save output.
+## 2025_1011
+Removes all dependencies and uses no third party code.
+  Removes 'turndown' (HTML to MD) library and related code.
+  Removes 'fflate' (Unzip / Zip) library and related code.
+Adds custom basic 'html to md' script (new separate project).
+Adds custom 'unzip' script (new separate project).
+Uses custom 'save tar' script (pre-existing separate project).
+Reduces project weight.
+Bundles and minified project into single HTML file under 24KB.
 
 ## 0524
 Adds a text file of the whole book to the files exported.
